@@ -22,7 +22,7 @@ namespace UserApi.Controllers
 
         [HttpGet]
         [EnableRateLimiting("LimitPolicy")]
-        [ProducesResponseType(typeof(IEnumerable<User>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<UserDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetUsers()
         {
             return Ok(await _userService.GetAllAsync());
@@ -30,7 +30,7 @@ namespace UserApi.Controllers
 
         [HttpGet("{id}")]
         [EnableRateLimiting("LimitPolicy")]
-        [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetUser(int id)
         {
@@ -41,20 +41,21 @@ namespace UserApi.Controllers
                 return NotFound();
             }
 
-            return Ok(user);
+            return Ok(UserMapper.ToUserDto(user));
         }
 
         [HttpPost]
         [EnableRateLimiting("LimitPolicy")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateUser([FromBody] User user)
+        public async Task<IActionResult> CreateUser([FromBody] UserDto userDto)
         {
             if(!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            var user = UserMapper.ToUser(userDto);
             var userExists = await _userService.DoesUserExistsWithEmail(user.Email);
 
             if(userExists)
@@ -64,14 +65,14 @@ namespace UserApi.Controllers
 
             await _userService.CreateAsync(user);
 
-            return CreatedAtAction(nameof(GetUser), new { Id = user.Id }, user);
+            return CreatedAtAction(nameof(GetUser), new { Id = user.Id }, UserMapper.ToUserDto(user));
         }
 
         [HttpPut("{id}")]
         [EnableRateLimiting("LimitPolicy")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateUser(User user)
+        public async Task<IActionResult> UpdateUser(UserDto userDto)
         {
 
             if(!ModelState.IsValid) 
@@ -79,6 +80,7 @@ namespace UserApi.Controllers
                 return BadRequest(ModelState);
             }
 
+            var user = UserMapper.ToUser(userDto);
             await _userService.UpdateAsync(user);
 
             return NoContent();

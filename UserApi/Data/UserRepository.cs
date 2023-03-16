@@ -30,10 +30,10 @@ namespace UserApi.Data
 
         public async Task<User> DeleteAsync(int id)
         {
-            var entity = await _context.Users.FindAsync(id);
-            _context.Users.Remove(entity);
+            var user = await _context.Users.FindAsync(id);
+            _context.Users.Remove(user);
             await _context.SaveChangesAsync();
-            return entity; 
+            return user; 
         }
 
         public async Task UpdateAsync(User user)
