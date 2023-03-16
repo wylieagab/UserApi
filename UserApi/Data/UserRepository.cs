@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Runtime.InteropServices;
-using UserApi.Data.Models;
 using UserApi.Models;
 
 namespace UserApi.Data
@@ -30,19 +28,28 @@ namespace UserApi.Data
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task<User> DeleteAsync(int id)
         {
             var entity = await _context.Users.FindAsync(id);
             _context.Users.Remove(entity);
             await _context.SaveChangesAsync();
+            return entity; 
         }
-
-        
 
         public async Task UpdateAsync(User user)
         {
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<User> GetWithEmailAsync(string email)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => String.Equals(u.Email, email)); 
+        }
+
+        public async Task<bool> DoesUserExistWithEmail(string email)
+        {
+            return await _context.Users.AnyAsync(u => String.Equals(u.Email, email));
         }
     }
 }

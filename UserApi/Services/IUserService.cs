@@ -8,6 +8,8 @@ namespace UserApi.Services
         Task<User> GetByIdAsync(int id);
         Task CreateAsync(User user);
         Task UpdateAsync(User user);
-        Task DeleteAsync(int id);
+        Task<User> DeleteAsync(int id);
+        Task<User> GetWithEmailAsync(string email);
+        Task<bool> DoesUserExistsWithEmail(string email);
     }
 }
