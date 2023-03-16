@@ -22,6 +22,7 @@ namespace UserApi.Controllers
 
         [HttpGet]
         [EnableRateLimiting("LimitPolicy")]
+        [ProducesResponseType(typeof(IEnumerable<User>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetUsers()
         {
             return Ok(await _userService.GetAllAsync());
