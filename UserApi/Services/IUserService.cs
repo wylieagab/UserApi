@@ -4,12 +4,12 @@ namespace UserApi.Services
 {
     public interface IUserService
     {
-        Task<IEnumerable<User>> GetAllAsync();
-        Task<User> GetByIdAsync(int id);
-        Task CreateAsync(User user);
-        Task UpdateAsync(User user);
-        Task<User> DeleteAsync(int id);
-        Task<User> GetWithEmailAsync(string email);
-        Task<bool> DoesUserExistsWithEmail(string email);
+        Task<IEnumerable<UserDto>> GetAllAsync();
+        Task<UserDto> GetByIdAsync(int id);
+        Task CreateAsync(UserDto userDto);
+        Task UpdateAsync(UserDto userDto);
+        Task<UserDto> DeleteAsync(int id);
+        Task<UserDto> GetWithEmailAsync(UserDto userDto);
+        Task<bool> DoesUserExistsWithEmail(UserDto userDto);
     }
 }

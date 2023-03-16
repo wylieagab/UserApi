@@ -34,14 +34,14 @@ namespace UserApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetUser(int id)
         {
-            var user = await _userService.GetByIdAsync(id);
+            var userDto = await _userService.GetByIdAsync(id);
 
-            if(user == null)
+            if(userDto == null)
             {
                 return NotFound();
             }
 
-            return Ok(UserMapper.ToUserDto(user));
+            return Ok(userDto);
         }
 
         [HttpPost]
@@ -55,24 +55,23 @@ namespace UserApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = UserMapper.ToUser(userDto);
-            var userExists = await _userService.DoesUserExistsWithEmail(user.Email);
+            var userExists = await _userService.DoesUserExistsWithEmail(userDto);
 
             if(userExists)
             {
                 return new BadRequestWithReasonResult("This email is already in use.");
             }
 
-            await _userService.CreateAsync(user);
+            await _userService.CreateAsync(userDto);
 
-            return CreatedAtAction(nameof(GetUser), new { Id = user.Id }, UserMapper.ToUserDto(user));
+            return CreatedAtAction(nameof(GetUser), new { Id = userDto.Id }, userDto);
         }
 
         [HttpPut("{id}")]
         [EnableRateLimiting("LimitPolicy")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateUser(UserDto userDto)
+        public async Task<IActionResult> UpdateUser(int id, UserDto userDto)
         {
 
             if(!ModelState.IsValid) 
@@ -80,8 +79,12 @@ namespace UserApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = UserMapper.ToUser(userDto);
-            await _userService.UpdateAsync(user);
+            if(id != userDto.Id)
+            {
+                return new BadRequestWithReasonResult("Id's in the body and url are not equal.");
+            }
+
+            await _userService.UpdateAsync(userDto);
 
             return NoContent();
         }

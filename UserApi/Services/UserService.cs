@@ -14,12 +14,13 @@ namespace UserApi.Services
             _cache = cache;
         }
 
-        public async Task<IEnumerable<User>> GetAllAsync()
+        public async Task<IEnumerable<UserDto>> GetAllAsync()
         {
-            return await _userRepository.GetAllAsync();
+            var users = await _userRepository.GetAllAsync();
+            return users.Select(UserMapper.ToUserDto).ToList();
         }
 
-        public async Task<User> GetByIdAsync(int id)
+        public async Task<UserDto> GetByIdAsync(int id)
         {
             var user = _cache.Get(id);
             if (user == null)
@@ -28,48 +29,48 @@ namespace UserApi.Services
 
                 if(user == null)
                 {
-                    return user;
+                    return null;
                 }
                 _cache.Set(user);
             }
 
-            return user;
+            return UserMapper.ToUserDto(user);
         }
 
-        public async Task CreateAsync(User user)
+        public async Task CreateAsync(UserDto userDto)
         {
+           var user = UserMapper.ToUser(userDto);
            await _userRepository.CreateAsync(user);
         }
 
-        public async Task<User> DeleteAsync(int id)
+        public async Task<UserDto> DeleteAsync(int id)
         {
             var userDeleted = await _userRepository.DeleteAsync(id);
             if (userDeleted != null)
             {
                 _cache.Remove(id);
+                return UserMapper.ToUserDto(userDeleted);
             }
-            return userDeleted;
+            return null;
         }
 
-        public async Task UpdateAsync(User user)
+        public async Task UpdateAsync(UserDto userDto)
         {
+            var user = UserMapper.ToUser(userDto);
             await _userRepository.UpdateAsync(user);
             _cache.Remove(user.Id);
         }
 
-        public async Task<User> ValidateUser(User user)
+        public async Task<UserDto> GetWithEmailAsync(UserDto userDto)
         {
-            throw new NotImplementedException();
+            var user = UserMapper.ToUser(userDto);
+            return UserMapper.ToUserDto(await _userRepository.GetWithEmailAsync(user.Email));
         }
 
-        public async Task<User> GetWithEmailAsync(string email)
+        public async Task<bool> DoesUserExistsWithEmail(UserDto userDto)
         {
-            return await _userRepository.GetWithEmailAsync(email);
-        }
-
-        public async Task<bool> DoesUserExistsWithEmail(string email)
-        {
-            var userExists = await _userRepository.DoesUserExistWithEmail(email);
+            var user = UserMapper.ToUser(userDto);
+            var userExists = await _userRepository.DoesUserExistWithEmail(user.Email);
             if (userExists)
             {
                 return true;
