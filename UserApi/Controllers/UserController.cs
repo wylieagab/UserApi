@@ -29,6 +29,8 @@ namespace UserApi.Controllers
 
         [HttpGet("{id}")]
         [EnableRateLimiting("LimitPolicy")]
+        [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetUser(int id)
         {
             var user = await _userService.GetByIdAsync(id);
@@ -43,6 +45,8 @@ namespace UserApi.Controllers
 
         [HttpPost]
         [EnableRateLimiting("LimitPolicy")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateUser([FromBody] User user)
         {
             if(!ModelState.IsValid)
@@ -64,6 +68,8 @@ namespace UserApi.Controllers
 
         [HttpPut("{id}")]
         [EnableRateLimiting("LimitPolicy")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateUser(User user)
         {
 
@@ -79,6 +85,8 @@ namespace UserApi.Controllers
 
         [HttpDelete("{id}")]
         [EnableRateLimiting("LimitPolicy")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> DeleteUser(int id)
         {
             var userDeleted = await _userService.DeleteAsync(id);
