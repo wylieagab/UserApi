@@ -1,5 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Xml.Serialization;
+using UserApi.Models.Extensions;
 
 namespace UserApi.Models
 {
@@ -23,6 +26,7 @@ namespace UserApi.Models
 
         [XmlElement(ElementName = "dob")]
         [DataType(DataType.DateTime)]
+        [JsonConverter(typeof(DateTimeJsonConverter), "yyyy-MM-dd", "yyyy-MM-ddTHH:mm:ss", "MM-dd-yyyy")]
         public DateTime? DOB { get; set; }
     }
 }
