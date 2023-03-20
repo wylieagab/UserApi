@@ -15,9 +15,9 @@ builder.Services.AddControllers()
     .AddXmlSerializerFormatters()
     .AddJsonOptions(options =>
     {
-    options.JsonSerializerOptions.PropertyNamingPolicy = null;
-    options.JsonSerializerOptions.Converters.Add(
-        new DateTimeJsonConverter(builder.Configuration.GetSection("Converter:Formats:DateTime").Get<string[]>()));
+        options.JsonSerializerOptions.PropertyNamingPolicy = null;
+        options.JsonSerializerOptions.Converters.Add(
+            new DateTimeJsonConverter(builder.Configuration.GetSection("Converter:Formats:DateTime").Get<string[]>()));
     });
 
 builder.Services.AddEndpointsApiExplorer();
