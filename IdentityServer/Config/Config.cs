@@ -37,7 +37,7 @@ namespace IdentityServer.Config
                     ClientId = "userapiclient",
                     ClientSecrets = { new Secret("035d330b-4c3b-4d3e-a534-a72d7e986377".Sha256()) },
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    AllowedScopes = { "userapi.fullaccess" }
+                    AllowedScopes = { "userapi.fullaccess" },
                 }
             };
     }
