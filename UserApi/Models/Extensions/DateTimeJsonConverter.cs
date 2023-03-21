@@ -27,7 +27,7 @@ namespace UserApi.Models.Extensions
 
         public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
         {
-            writer.WriteStringValue(value.ToString(_formats[1], CultureInfo.InvariantCulture));
+            writer.WriteStringValue(value.ToString(_formats[2], CultureInfo.InvariantCulture));
         }
     }
 }
