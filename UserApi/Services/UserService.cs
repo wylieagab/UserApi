@@ -37,10 +37,10 @@ namespace UserApi.Services
             return UserMapper.ToUserDto(user);
         }
 
-        public async Task CreateAsync(UserDto userDto)
+        public async Task<UserDto> CreateAsync(UserDto userDto)
         {
            var user = UserMapper.ToUser(userDto);
-           await _userRepository.CreateAsync(user);
+           return UserMapper.ToUserDto(await _userRepository.CreateAsync(user));
         }
 
         public async Task<UserDto> DeleteAsync(int id)

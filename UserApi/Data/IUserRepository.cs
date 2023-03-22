@@ -6,7 +6,7 @@ namespace UserApi.Data
     {
         Task<IEnumerable<User>> GetAllAsync();
         Task<User> GetByIdAsync(int id);
-        Task CreateAsync(User user);
+        Task<User> CreateAsync(User user);
         Task UpdateAsync(User user);
         Task<User> DeleteAsync(int id);
         Task<User> GetWithEmailAsync(string email);

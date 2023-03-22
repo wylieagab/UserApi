@@ -6,27 +6,27 @@ using UserApi.Models.Extensions;
 
 namespace UserApi.Models
 {
-    [XmlRoot(ElementName = "user")]
+    [XmlRoot(ElementName = "UserDto")]
     public class UserDto
     {
-        [XmlElement(ElementName = "id")]
+        [XmlElement(ElementName = "Id")]
         public int Id { get; set; }
 
         [Required]
-        [XmlElement(ElementName = "name")]
+        [XmlElement(ElementName = "Name")]
         public string Name { get; set; }
         
         [Required]
-        [XmlElement(ElementName = "email")]
+        [XmlElement(ElementName = "Email")]
         [EmailAddress(ErrorMessage = "Invalid email address")]
         public string Email { get; set; }
 
-        [XmlElement(ElementName = "address")]
-        public string? Address { get; set; }
+        [XmlElement(ElementName = "Address")]
+        public AddressDto? Address { get; set; }
 
-        [XmlElement(ElementName = "dob")]
+        [XmlElement(ElementName = "DOB")]
         [DataType(DataType.DateTime)]
-        [JsonConverter(typeof(DateTimeJsonConverter), "yyyy-MM-dd", "yyyy-MM-ddTHH:mm:ss", "MM-dd-yyyy")]
+        [JsonConverter(typeof(DateTimeJsonConverter), "yyyy-MM-dd", "yyyy-MM-ddTHH:mm:ss", "yyyy-MM-ddTHH:mm:ss.fffZ", "MM-dd-yyyy")]
         public DateTime? DOB { get; set; }
     }
 }

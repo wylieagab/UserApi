@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UserApi.Data;
 
@@ -11,9 +12,11 @@ using UserApi.Data;
 namespace UserApi.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-    partial class UserDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230321211457_AddAddressTable")]
+    partial class AddAddressTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,19 +49,13 @@ namespace UserApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ZipCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("Addresses");
+                    b.ToTable("Address");
                 });
 
             modelBuilder.Entity("UserApi.Models.User", b =>
@@ -68,6 +65,9 @@ namespace UserApi.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("AddressId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("DOB")
                         .HasColumnType("datetime2");
@@ -82,22 +82,17 @@ namespace UserApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AddressId");
+
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("UserApi.Models.Address", b =>
-                {
-                    b.HasOne("UserApi.Models.User", "User")
-                        .WithOne("Address")
-                        .HasForeignKey("UserApi.Models.Address", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("UserApi.Models.User", b =>
                 {
+                    b.HasOne("UserApi.Models.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressId");
+
                     b.Navigation("Address");
                 });
 #pragma warning restore 612, 618

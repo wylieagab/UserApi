@@ -62,9 +62,9 @@ namespace UserApi.Controllers
                 return new BadRequestWithReasonResult("This email is already in use.");
             }
 
-            await _userService.CreateAsync(userDto);
+            var createdUser = await _userService.CreateAsync(userDto);
 
-            return CreatedAtAction(nameof(GetUser), new { Id = userDto.Id }, userDto);
+            return CreatedAtAction(nameof(GetUser), new { Id = createdUser.Id }, createdUser);
         }
 
         [HttpPut("{id}")]
@@ -82,6 +82,13 @@ namespace UserApi.Controllers
             if(id != userDto.Id)
             {
                 return new BadRequestWithReasonResult("Id's in the body and url are not equal.");
+            }
+
+            var userExists = await _userService.DoesUserExistsWithEmail(userDto);
+
+            if (userExists)
+            {
+                return new BadRequestWithReasonResult("This email is already in use.");
             }
 
             await _userService.UpdateAsync(userDto);
