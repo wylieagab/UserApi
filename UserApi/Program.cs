@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
 using UserApi.Models.Extensions;
 using Microsoft.OpenApi.Models;
+using UserApi.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -80,6 +81,7 @@ builder.Services.Configure<MemoryCacheOptions>(options =>
     options.ExpirationScanFrequency = TimeSpan.FromMinutes(1);
 });
 builder.Services.AddSingleton<IUserCache, UserCache>();
+builder.Services.AddScoped<IUserValidator, UserValidator>();
 
 
 var app = builder.Build();

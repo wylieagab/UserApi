@@ -5,6 +5,7 @@ using UserApi.Models.Constants;
 using UserApi.Models.Dtos;
 using UserApi.Models.Extensions;
 using UserApi.Services;
+using UserApi.Validators;
 
 namespace UserApi.Controllers
 {
@@ -14,10 +15,12 @@ namespace UserApi.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IUserValidator _userValidator;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, IUserValidator userValidator)
         {
             _userService = userService;
+            _userValidator = userValidator;
         }
 
 
@@ -56,11 +59,10 @@ namespace UserApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            var userExists = await _userService.DoesUserExistsWithEmail(userDto);
-
-            if(userExists)
+            var (isUserValid, responseMessage) = await _userValidator.ValidateEmailUniquenessAsync(userDto);
+            if(!isUserValid)
             {
-                return new BadRequestWithReasonResult(ResponseConstants.EmailInUse);
+                return new BadRequestWithReasonResult(responseMessage);
             }
 
             var createdUser = await _userService.CreateAsync(userDto);
@@ -80,16 +82,10 @@ namespace UserApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            if(id != userDto.Id)
+            var (isValidUser, responseMessage) = await _userValidator.ValidateUserPutRequestAsync(id, userDto);
+            if(!isValidUser)
             {
-                return new BadRequestWithReasonResult(ResponseConstants.NoIdMatch);
-            }
-
-            var userExists = await _userService.DoesUserExistsWithEmail(userDto);
-
-            if (userExists)
-            {
-                return new BadRequestWithReasonResult(ResponseConstants.EmailInUse);
+                return new BadRequestWithReasonResult(responseMessage);
             }
 
             await _userService.UpdateAsync(userDto);
