@@ -1,6 +1,8 @@
 ﻿using System.Net.NetworkInformation;
+using UserApi.Models.Dtos;
+using UserApi.Models.Entities;
 
-namespace UserApi.Models
+namespace UserApi.Models.Mappers
 {
     public static class AddressMapper
     {

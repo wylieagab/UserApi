@@ -1,4 +1,4 @@
-﻿using UserApi.Models;
+﻿using UserApi.Models.Dtos;
 
 namespace UserApi.Services
 {

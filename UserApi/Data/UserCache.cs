@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
-using UserApi.Models;
+using UserApi.Models.Entities;
 
 namespace UserApi.Data
 {

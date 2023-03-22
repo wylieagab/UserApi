@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace UserApi.Models
+namespace UserApi.Models.Dtos
 {
     [XmlRoot(ElementName = "AddressDto")]
     public class AddressDto

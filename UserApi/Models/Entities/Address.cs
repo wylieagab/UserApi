@@ -1,4 +1,4 @@
-﻿namespace UserApi.Models
+﻿namespace UserApi.Models.Entities
 {
     public class Address
     {

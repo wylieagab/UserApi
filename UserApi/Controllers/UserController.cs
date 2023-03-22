@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
-using UserApi.Models;
+using UserApi.Models.Constants;
+using UserApi.Models.Dtos;
 using UserApi.Models.Extensions;
 using UserApi.Services;
 
@@ -59,7 +60,7 @@ namespace UserApi.Controllers
 
             if(userExists)
             {
-                return new BadRequestWithReasonResult("This email is already in use.");
+                return new BadRequestWithReasonResult(ResponseConstants.EmailInUse);
             }
 
             var createdUser = await _userService.CreateAsync(userDto);
@@ -81,14 +82,14 @@ namespace UserApi.Controllers
 
             if(id != userDto.Id)
             {
-                return new BadRequestWithReasonResult("Id's in the body and url are not equal.");
+                return new BadRequestWithReasonResult(ResponseConstants.NoIdMatch);
             }
 
             var userExists = await _userService.DoesUserExistsWithEmail(userDto);
 
             if (userExists)
             {
-                return new BadRequestWithReasonResult("This email is already in use.");
+                return new BadRequestWithReasonResult(ResponseConstants.EmailInUse);
             }
 
             await _userService.UpdateAsync(userDto);

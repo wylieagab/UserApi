@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Xml.Serialization;
 using UserApi.Models.Extensions;
 
-namespace UserApi.Models
+namespace UserApi.Models.Dtos
 {
     [XmlRoot(ElementName = "UserDto")]
     public class UserDto
@@ -15,7 +15,7 @@ namespace UserApi.Models
         [Required]
         [XmlElement(ElementName = "Name")]
         public string Name { get; set; }
-        
+
         [Required]
         [XmlElement(ElementName = "Email")]
         [EmailAddress(ErrorMessage = "Invalid email address")]

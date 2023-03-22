@@ -1,4 +1,8 @@
-﻿namespace UserApi.Models
+﻿using UserApi.Models.Dtos;
+using UserApi.Models.Entities;
+using UserApi.Models.Mappers;
+
+namespace UserApi.Models.Mappers
 {
     public static class UserMapper
     {

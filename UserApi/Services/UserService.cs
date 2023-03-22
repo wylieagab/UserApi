@@ -1,5 +1,6 @@
 ﻿using UserApi.Data;
-using UserApi.Models;
+using UserApi.Models.Dtos;
+using UserApi.Models.Mappers;
 
 namespace UserApi.Services
 {
